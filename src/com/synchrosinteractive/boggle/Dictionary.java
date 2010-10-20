@@ -18,7 +18,7 @@ public class Dictionary {
 	public Dictionary() {
 		List<String> words = new ArrayList<String>();
 		try {
-			BufferedReader br = new BufferedReader(new FileReader("/home/dmcquay/Desktop/DICT.TXT"));
+			BufferedReader br = new BufferedReader(new FileReader("assets/DICT.TXT"));
 			String word = "";
 			while((word = br.readLine()) != null) {
 				words.add(word);
