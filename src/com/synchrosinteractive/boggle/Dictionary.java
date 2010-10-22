@@ -71,12 +71,30 @@ public class Dictionary {
 	
 	public static void main(String[] args) {
 		Dictionary dict = new Dictionary();
-		dict.search("poteena");
-		System.out.println("poteena: " + resultToString(dict.search("poteena")));
-		System.out.println("u: " + resultToString(dict.search("u")));
-		System.out.println("ab: " + resultToString(dict.search("ab")));
-		System.out.println("abc: " + resultToString(dict.search("abc")));
-		System.out.println("abcd: " + resultToString(dict.search("abcd")));
+		String str = null;
+		
+		str = "poteena";
+		assert (dict.search(str) & WORD) == 0;
+		assert (dict.search(str) & PREFIX) == 0;
+		assert (dict.search(str) & NONE) > 0;
+		
+		str = "u";
+		assert (dict.search(str) & PREFIX) > 0;
+		assert (dict.search(str) & WORD) == 0;
+		assert (dict.search(str) & NONE) == 0;
+		
+		str = "ab";
+		assert (dict.search(str) & PREFIX) > 0;
+		assert (dict.search(str) & WORD) > 0;
+		assert (dict.search(str) & NONE) == 0;
+		
+		str = "abc";
+		assert (dict.search(str) & PREFIX) == 0;
+		assert (dict.search(str) & WORD) == 0;
+		assert (dict.search(str) & NONE) > 0;
+		
+		System.out.println("Assertion tests passed.");
+		
 		System.out.println("Performance test...");
 		long start = (new Date()).getTime();
 		for (int i = 1; i <= 1000000; i++) {
