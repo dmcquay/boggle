@@ -10,6 +10,7 @@ public class Board {
 	private String[][] dice;
 	private String[][] board;
 	private Dictionary dict;
+	private List<String> words;
 	
 	public Board() {
 		this.dice = DieFactory.getDice();
@@ -17,8 +18,16 @@ public class Board {
 		this.scramble();
 	}
 	
+	private List<String> getWords() {
+		if (this.words == null) {
+			this.words = this.solve();
+		}
+		return this.words;
+	}
+	
 	public void scramble() {
 		assert this.dice != null : "this.dice should never be null";
+		this.words = null; //solved words from last board are now invalid
 		List<String[]> dice = new ArrayList<String[]>();
 		for (int i = 0; i < this.dice.length; i++) {
 			dice.add(this.dice[i].clone());
@@ -32,6 +41,11 @@ public class Board {
 			}
 		}
 		this.board = board;
+	}
+	
+	public boolean isValidWord(String word) {
+		if (this.board == null) return false;
+		return this.getWords().contains(word.toLowerCase());
 	}
 	
 	public List<String> solve() {
