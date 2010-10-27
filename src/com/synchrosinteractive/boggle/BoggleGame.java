@@ -3,6 +3,7 @@ package com.synchrosinteractive.boggle;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -23,6 +24,27 @@ public class BoggleGame {
 	
 	public String[][] getBoard() {
 		return this.board;
+	}
+	
+	public static int[][] pathListToCellArray(List<int[][]> paths) {
+		Set<int[]> cells = new HashSet<int[]>();
+		for (int[][] path : paths) {
+			for (int[] cell : path) {
+				boolean seen = false;
+				for (int[] seenCell : cells) {
+					if (seenCell[0] == cell[0] && seenCell[1] == cell[1]) {
+						seen = true;
+						break;
+					}
+				}
+				if (!seen) {
+					cells.add(cell);
+				}
+			}
+		}
+		int[][] cellArray = new int[cells.size()][2];
+		cells.toArray(cellArray);
+		return cellArray;
 	}
 	
 	private Set<String> getWords() {
