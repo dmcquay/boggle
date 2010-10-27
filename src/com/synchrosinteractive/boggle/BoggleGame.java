@@ -53,6 +53,10 @@ public class BoggleGame {
 	}
 	
 	public List<String> solve() {
+		return this.solve(this.dict);
+	}
+	
+	public List<String> solve(Dictionary dict) {
 		List<String> words = new ArrayList<String>();
 		assert this.board != null : "this.board should not be null";
 		int maxWordLength = this.board.length * this.board[0].length;
@@ -61,13 +65,22 @@ public class BoggleGame {
 			for (int col = 0; col < this.board[0].length; col++) {
 				chain[0][0] = row;
 				chain[0][1] = col;
-				checkChain(chain, 1, words);
+				checkChain(chain, 1, words, dict);
 			}
 		}
 		return words;
 	}
 	
+	public List<int[][]> find(String str) {
+		List<int[][]> path = new ArrayList<int[][]>();
+		return path;
+	}
+	
 	public void checkChain(int[][] chain, int chainLength, List<String> words) {
+		this.checkChain(chain, chainLength, words, this.dict);
+	}
+	
+	public void checkChain(int[][] chain, int chainLength, List<String> words, Dictionary dict) {
 		int row = chain[chainLength - 1][0];
 		int col = chain[chainLength - 1][1];
 		
@@ -89,7 +102,7 @@ public class BoggleGame {
 			sb.append(this.board[chain[i][0]][chain[i][1]]);
 		}
 		String chkStr = sb.toString();
-		int type = this.dict.search(chkStr);
+		int type = dict.search(chkStr);
 		
 		// if this is a WORD, add to the list and return
 		if ((type & Dictionary.WORD) > 0) {

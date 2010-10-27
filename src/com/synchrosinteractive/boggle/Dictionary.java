@@ -31,6 +31,10 @@ public class Dictionary {
 		this.words = words;
 	}
 	
+	public Dictionary(List<String> words) {
+		this.words = words;
+	}
+	
 	public byte search(String str) {
 		List<String> words = this.words;
 		int min = 0;
