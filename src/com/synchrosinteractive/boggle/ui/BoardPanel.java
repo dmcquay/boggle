@@ -2,10 +2,14 @@ package com.synchrosinteractive.boggle.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.List;
 
 import com.synchrosinteractive.boggle.*;
 import javax.swing.*;
@@ -53,6 +57,9 @@ public class BoardPanel extends JPanel {
 	}
 
 	public int[][] getHighlightedCells() {
+		if (this.highlightedCells == null) {
+			this.highlightedCells = new int[][] {};
+		}
 		return this.highlightedCells;
 	}
 
@@ -61,7 +68,7 @@ public class BoardPanel extends JPanel {
 	}
 
 	private boolean isHighlightedCell(int col, int row) {
-		for (int[] cell : highlightedCells) {
+		for (int[] cell : getHighlightedCells()) {
 			if (cell[0] == col && cell[1] == row) {
 				return true;
 			}
@@ -118,12 +125,36 @@ public class BoardPanel extends JPanel {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		BoggleGame boggle = new BoggleGame();
+		final BoggleGame boggle = new BoggleGame();
 		JFrame f = new JFrame();
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		BoardPanel bp = new BoardPanel(boggle.getBoard());
-		bp.setHighlightedCells(new int[][] {{0,0}, {0,1}, {0,2}, {1,2}});
-		f.add(bp);
+		final BoardPanel bp = new BoardPanel(boggle.getBoard());
+		//bp.setHighlightedCells(new int[][] {{0,0}, {0,1}, {0,2}, {1,2}});
+		
+		final JTextField inpt = new JTextField();
+		Dimension inptSize = new Dimension(400, 25);
+		inpt.setPreferredSize(inptSize);
+		inpt.setSize(inptSize);
+		inpt.addKeyListener(new KeyListener() {
+			@Override
+			public void keyPressed(KeyEvent evt) {}
+			@Override
+			public void keyReleased(KeyEvent evt) {
+				List<int[][]> paths = boggle.findPaths(inpt.getText());
+				int[][] cells = BoggleGame.pathListToCellArray(paths);
+				System.out.println("# paths: " + (paths == null ? 0 : paths.size()));
+				bp.setHighlightedCells(cells);
+				bp.paintComponent(bp.getGraphics());
+			}
+			@Override
+			public void keyTyped(KeyEvent evt) {}
+		});
+		JPanel p = new JPanel();
+		p.setLayout(new FlowLayout());
+		p.add(bp);
+		p.add(inpt);
+		f.add(p);
+		
 		f.pack();
 		f.setVisible(true);
 	}

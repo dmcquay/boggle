@@ -82,6 +82,9 @@ public class Dictionary {
 		assert (dict.search("c") & WORD) == 0;
 		assert (dict.search("c") & NONE) == 0;
 		assert (dict.search("c") & PREFIX) > 0;
+		assert (dict.search("co") & WORD) == 0;
+		assert (dict.search("co") & NONE) == 0;
+		assert (dict.search("co") & PREFIX) > 0;
 		assert (dict.search("cool") & WORD) > 0;
 		assert (dict.search("cool") & NONE) == 0;
 		assert (dict.search("cool") & PREFIX) == 0;

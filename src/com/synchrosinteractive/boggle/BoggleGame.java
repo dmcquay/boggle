@@ -19,14 +19,23 @@ public class BoggleGame {
 	public BoggleGame() {
 		this.dice = DieFactory.getDice();
 		this.dict = new Dictionary();
-		this.scramble();
+	}
+	
+	public void setBoard(String[][] board) {
+		this.board = board;
 	}
 	
 	public String[][] getBoard() {
+		if (board == null) {
+			this.scramble();
+		}
 		return this.board;
 	}
 	
 	public static int[][] pathListToCellArray(List<int[][]> paths) {
+		if (paths == null) {
+			return new int[][] {};
+		}
 		Set<int[]> cells = new HashSet<int[]>();
 		for (int[][] path : paths) {
 			for (int[] cell : path) {
