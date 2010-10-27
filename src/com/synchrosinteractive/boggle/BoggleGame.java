@@ -5,17 +5,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-public class Board {
+public class BoggleGame {
 	private static final int BOARD_SIZE = 4; 
 	private String[][] dice;
 	private String[][] board;
 	private Dictionary dict;
 	private List<String> words;
 	
-	public Board() {
+	public BoggleGame() {
 		this.dice = DieFactory.getDice();
 		this.dict = new Dictionary();
 		this.scramble();
+	}
+	
+	public String[][] getBoard() {
+		return this.board;
 	}
 	
 	private List<String> getWords() {
@@ -122,11 +126,11 @@ public class Board {
 	public static void main(String[] args) {
 		System.out.println("Running performance test...");
 		int n = 1000;
-		Board board = new Board();
+		BoggleGame boggle = new BoggleGame();
 		long start = (new Date()).getTime();
 		for (int i = 1; i <= n; i++) {
-			board.scramble();
-			board.solve();
+			boggle.scramble();
+			boggle.solve();
 		}
 		long end = (new Date()).getTime();
 		System.out.println(n + " boards created and solved in "
