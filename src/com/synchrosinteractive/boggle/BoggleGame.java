@@ -2,15 +2,18 @@ package com.synchrosinteractive.boggle;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 public class BoggleGame {
 	private static final int BOARD_SIZE = 4; 
 	private String[][] dice;
 	private String[][] board;
 	private Dictionary dict;
-	private List<String> words;
+	private Set<String> words;
 	
 	public BoggleGame() {
 		this.dice = DieFactory.getDice();
@@ -22,9 +25,9 @@ public class BoggleGame {
 		return this.board;
 	}
 	
-	private List<String> getWords() {
+	private Set<String> getWords() {
 		if (this.words == null) {
-			this.words = this.solve();
+			this.words = this.solve().keySet();
 		}
 		return this.words;
 	}
@@ -52,12 +55,12 @@ public class BoggleGame {
 		return this.getWords().contains(word.toLowerCase());
 	}
 	
-	public List<String> solve() {
+	public Map<String, List<int[][]>> solve() {
 		return this.solve(this.dict);
 	}
 	
-	public List<String> solve(Dictionary dict) {
-		List<String> words = new ArrayList<String>();
+	public Map<String, List<int[][]>> solve(Dictionary dict) {
+		Map<String, List<int[][]>> words = new HashMap<String, List<int[][]>>();
 		assert this.board != null : "this.board should not be null";
 		int maxWordLength = this.board.length * this.board[0].length;
 		int[][] chain = new int[maxWordLength][2];
@@ -76,11 +79,11 @@ public class BoggleGame {
 		return path;
 	}
 	
-	public void checkChain(int[][] chain, int chainLength, List<String> words) {
+	public void checkChain(int[][] chain, int chainLength, Map<String, List<int[][]>> words) {
 		this.checkChain(chain, chainLength, words, this.dict);
 	}
 	
-	public void checkChain(int[][] chain, int chainLength, List<String> words, Dictionary dict) {
+	public void checkChain(int[][] chain, int chainLength, Map<String, List<int[][]>> words, Dictionary dict) {
 		int row = chain[chainLength - 1][0];
 		int col = chain[chainLength - 1][1];
 		
@@ -106,7 +109,12 @@ public class BoggleGame {
 		
 		// if this is a WORD, add to the list and return
 		if ((type & Dictionary.WORD) > 0) {
-			words.add(chkStr);
+			List<int[][]> chains = words.get(chkStr);
+			if (chains == null) {
+				chains = new ArrayList<int[][]>();
+				words.put(chkStr, chains);
+			}
+			chains.add(chain.clone());
 		}
 		
 		// if this is no even a subset of any word, return
