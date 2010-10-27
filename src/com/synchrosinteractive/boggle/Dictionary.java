@@ -51,7 +51,9 @@ public class Dictionary {
 				}
 				return result;
 			} else if (min == max) {
-				if (words.size() - 1 > mid && words.get(mid + 1).startsWith(str)) {
+				if (words.get(mid).startsWith(str)) {
+					return PREFIX;
+				} else if (words.size() - 1 > mid && words.get(mid + 1).startsWith(str)) {
 					return PREFIX;
 				} else {
 					return NONE;
@@ -74,7 +76,17 @@ public class Dictionary {
 	}
 	
 	public static void main(String[] args) {
-		Dictionary dict = new Dictionary();
+		List<String> words = new ArrayList<String>();
+		words.add("cool");
+		Dictionary dict = new Dictionary(words);
+		assert (dict.search("c") & WORD) == 0;
+		assert (dict.search("c") & NONE) == 0;
+		assert (dict.search("c") & PREFIX) > 0;
+		assert (dict.search("cool") & WORD) > 0;
+		assert (dict.search("cool") & NONE) == 0;
+		assert (dict.search("cool") & PREFIX) == 0;
+		
+		dict = new Dictionary();
 		String str = null;
 		
 		str = "poteena";
@@ -93,9 +105,9 @@ public class Dictionary {
 		assert (dict.search(str) & NONE) == 0;
 		
 		str = "abc";
-		assert (dict.search(str) & PREFIX) == 0;
+		assert (dict.search(str) & PREFIX) > 0;
 		assert (dict.search(str) & WORD) == 0;
-		assert (dict.search(str) & NONE) > 0;
+		assert (dict.search(str) & NONE) == 0;
 		
 		System.out.println("Assertion tests passed.");
 		

@@ -74,9 +74,13 @@ public class BoggleGame {
 		return words;
 	}
 	
-	public List<int[][]> find(String str) {
-		List<int[][]> path = new ArrayList<int[][]>();
-		return path;
+	public List<int[][]> findPaths(String str) {
+		List<int[][]> paths = new ArrayList<int[][]>();
+		List<String> dictWords = new ArrayList<String>();
+		dictWords.add(str);
+		Dictionary dict = new Dictionary(dictWords);
+		paths = this.solve(dict).get(str);
+		return paths;
 	}
 	
 	public void checkChain(int[][] chain, int chainLength, Map<String, List<int[][]>> words) {
@@ -146,7 +150,7 @@ public class BoggleGame {
 	
 	public static void main(String[] args) {
 		System.out.println("Running performance test...");
-		int n = 1000;
+		int n = 100;
 		BoggleGame boggle = new BoggleGame();
 		long start = (new Date()).getTime();
 		for (int i = 1; i <= n; i++) {
@@ -157,5 +161,14 @@ public class BoggleGame {
 		System.out.println(n + " boards created and solved in "
 				+ ((float) (end - start) / 1000) + " seconds. That's "
 				+ ((float) (end - start) / n) + " millis per board.");
+		
+		System.out.print("Running test for findPaths...");
+		boggle.scramble();
+		Set<String> words = boggle.solve().keySet();
+		List<int[][]> paths = boggle.findPaths((String)words.toArray()[0]);
+		assert paths.size() > 0 : "found path(s) for word that should exist";
+		paths = boggle.findPaths("nowaythisexistsontheboard");
+		assert paths == null : "found no path(s) for word that should exist";
+		System.out.println("success");
 	}
 }
